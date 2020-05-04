@@ -1,0 +1,28 @@
+
+CREATE TABLE USERS (
+user_id INT(10) UNSIGNED NOT NULL PRIMARY KEY,
+user_name VARCHAR(50) NOT NULL,
+password VARCHAR(50) NOT NULL,
+enabled boolean
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE USERS_ROLES (
+  user_role_id INT(10) UNSIGNED NOT NULL PRIMARY KEY,
+  user_id INT(10) UNSIGNED NOT NULL,
+  authority VARCHAR(45) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (user_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+INSERT INTO users (user_id, user_name, password, enabled)
+VALUES (1, 'chandran', 'chandran', true),
+       (2, 'vennila', 'vennila123', true),
+       (3, 'nila', 'nila123', true);
+ 
+INSERT INTO users_roles (user_role_id, user_id, authority)
+VALUES (10, 1, 'ROLE_ADMIN'),
+       (11, 2, 'ROLE_USER'),
+       (12, 3, 'ROLE_USER');
+
+
