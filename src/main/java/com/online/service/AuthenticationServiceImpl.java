@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.online.dao.AuthenticationDao;
 import com.online.entities.Users;
+import com.online.entities.UsersRoles;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService, UserDetailsService{
@@ -18,15 +19,19 @@ public class AuthenticationServiceImpl implements AuthenticationService, UserDet
 	
 	@Override
 	@Transactional
-	public Users saveUser(Users user) {
-		return authDao.save(user);
+	public UserDetails loadUserByUsername(String username) {
+		
+		return authDao.findByUsername(username);
 	}
 
 	@Override
 	@Transactional
-	public UserDetails loadUserByUsername(String username) {
-		
-		return authDao.findByUsername(username);
+	public String registerUserDetails(Users user) {
+		UsersRoles usersRole = new UsersRoles();
+		usersRole.setRole("ROLE_USER");
+		usersRole.setUsers(user);
+		user.setUsersRole(usersRole);
+		return authDao.registerUser(user);
 	}
 
 }

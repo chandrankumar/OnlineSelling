@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.online.config.JwtTokenUtil;
@@ -22,6 +23,7 @@ import com.online.service.AuthenticationService;
 
 @CrossOrigin
 @RestController
+@RequestMapping("/authenticate")
 public class AuthenticationController {
 	
 	@Autowired
@@ -33,8 +35,15 @@ public class AuthenticationController {
 	@Autowired
 	JwtTokenUtil jwtTokenUtil;
 	
-	@PostMapping("/authenticate")
-	public ResponseEntity<?> registerUser(@RequestBody JwtRequest user) throws Exception{
+	@PostMapping("/register")
+	public ResponseEntity<?> registerUser(@RequestBody Users user) throws Exception{
+		
+		String response = authService.registerUserDetails(user);
+		return ResponseEntity.ok(response);
+	}
+	
+	@PostMapping("/login")
+	public ResponseEntity<?> authenticateUser(@RequestBody JwtRequest user) throws Exception{
 		
 		authenticate(user.getUsername(),user.getPassword());
 		UserDetails userDetails = authService.loadUserByUsername(user.getUsername());

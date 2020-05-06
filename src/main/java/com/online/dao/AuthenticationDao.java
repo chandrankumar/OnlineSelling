@@ -8,5 +8,5 @@ public interface AuthenticationDao{
 
 	public UserDetails findByUsername(String username);
 	
-	public Users save(Users user);
+	public String registerUser(Users user);
 }

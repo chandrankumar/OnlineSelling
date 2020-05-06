@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -21,9 +22,10 @@ public class UsersRoles implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_role_id")
-	private int user_role_id;
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="USER_ROLE_SEQ")
+	@SequenceGenerator(schema="veggi",name="USER_ROLE_SEQ",sequenceName="USER_ROLE_SEQ",allocationSize=1)
+	@Column(name="user_role_id")
+	private int userRoleId;
 
 	@OneToOne
 	@JoinColumn(name = "user_id")
@@ -33,17 +35,17 @@ public class UsersRoles implements Serializable {
 	private String role;
 
 	/**
-	 * @return the user_role_id
+	 * @return the userRoleId
 	 */
-	public int getUser_role_id() {
-		return user_role_id;
+	public int getUserRoleId() {
+		return userRoleId;
 	}
 
 	/**
-	 * @param user_role_id the user_role_id to set
+	 * @param userRoleId the userRoleId to set
 	 */
-	public void setUser_role_id(int user_role_id) {
-		this.user_role_id = user_role_id;
+	public void setUserRoleId(int userRoleId) {
+		this.userRoleId = userRoleId;
 	}
 
 	/**

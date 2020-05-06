@@ -1,28 +1,51 @@
 
-CREATE TABLE USERS (
-user_id INT(10) UNSIGNED NOT NULL PRIMARY KEY,
+CREATE TABLE veggi.users(
+user_id INT(10) PRIMARY KEY AUTO_INCREMENT  ,
 user_name VARCHAR(50) NOT NULL,
 password VARCHAR(50) NOT NULL,
-enabled boolean
+email VARCHAR(50) NOT NULL,
+mobile VARCHAR(50) NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE USERS_ROLES (
-  user_role_id INT(10) UNSIGNED NOT NULL PRIMARY KEY,
-  user_id INT(10) UNSIGNED NOT NULL,
+CREATE TABLE veggi.users_roles (
+  user_role_id INT(10) PRIMARY KEY AUTO_INCREMENT ,
+  user_id INT(10) NULL,
   authority VARCHAR(45) NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
+  FOREIGN KEY (user_id) REFERENCES veggi.users(user_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-INSERT INTO users (user_id, user_name, password, enabled)
-VALUES (1, 'chandran', 'chandran', true),
-       (2, 'vennila', 'vennila123', true),
-       (3, 'nila', 'nila123', true);
+INSERT INTO users (user_name, password, email, mobile ,enabled)
+VALUES ('chandran', 'chandran','chan@ibm.com','9887654322', true),
+       ('vennila', 'vennila123', 'vnilla@ibm.com','8987654321', true),
+       ('nila', 'nila123','nila@ibm.com','7586375634', true);
  
-INSERT INTO users_roles (user_role_id, user_id, authority)
-VALUES (10, 1, 'ROLE_ADMIN'),
-       (11, 2, 'ROLE_USER'),
-       (12, 3, 'ROLE_USER');
+INSERT INTO users_roles (user_id, authority)
+VALUES (1, 'ROLE_ADMIN'),
+       (2, 'ROLE_USER'),
+       (3, 'ROLE_USER');
+       
+       
+CREATE TABLE `USER_SEQ` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
 
+CREATE TABLE `USER_ROLE_SEQ` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
 
+create table hibernate_sequences(
+    next_val INTEGER
+)ENGINE=MyISAM;
+
+create table veggi.user_seq(
+    next_val INTEGER
+)ENGINE=MyISAM;
+
+INSERT INTO veggi.user_seq (next_val) VALUES (1);
+INSERT INTO veggi.user_role_seq (next_val) VALUES (1);
+
+create table veggi.user_role_seq(
+    next_val INTEGER
+)ENGINE=MyISAM;

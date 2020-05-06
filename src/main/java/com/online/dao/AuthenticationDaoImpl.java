@@ -42,8 +42,14 @@ public class AuthenticationDaoImpl implements AuthenticationDao{
 
 	@Override
 	@Transactional
-	public Users save(Users user) {
-		return manager.merge(user);
+	public String registerUser(Users user) {
+		manager.persist(user);
+		manager.flush();
+		if(user.getId() != null){
+			return "Created Successfully";
+		}else {
+			return "Not Created";
+		}
 	}
 
 
