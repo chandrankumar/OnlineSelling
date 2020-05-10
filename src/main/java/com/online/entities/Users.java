@@ -23,9 +23,9 @@ public class Users implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="USER_SEQ")
-	@SequenceGenerator(schema="veggi",name="USER_SEQ",sequenceName="USER_SEQ",allocationSize=1)
-	@Column(name="user_id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ")
+	@SequenceGenerator(schema = "veggi", name = "USER_SEQ", sequenceName = "USER_SEQ", allocationSize = 1)
+	@Column(name = "user_id")
 	private Integer id;
 
 	@Column(name = "user_name")
@@ -35,12 +35,12 @@ public class Users implements Serializable {
 	private String password;
 
 	@Column(name = "email")
-	private String emailId;
+	private String email;
 
 	@Column(name = "mobile")
-	private String mobileNumber;
+	private String mobile;
 
-	@OneToOne(mappedBy = "users", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToOne(mappedBy = "users", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private UsersRoles usersRole;
 
 	/**
@@ -100,31 +100,31 @@ public class Users implements Serializable {
 	}
 
 	/**
-	 * @return the emailId
+	 * @return the email
 	 */
-	public String getEmailId() {
-		return emailId;
+	public String getEmail() {
+		return email;
 	}
 
 	/**
-	 * @param emailId the emailId to set
+	 * @param email the email to set
 	 */
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	/**
-	 * @return the mobileNumber
+	 * @return the mobile
 	 */
-	public String getMobileNumber() {
-		return mobileNumber;
+	public String getMobile() {
+		return mobile;
 	}
 
 	/**
-	 * @param mobileNumber the mobileNumber to set
+	 * @param mobile the mobile to set
 	 */
-	public void setMobileNumber(String mobileNumber) {
-		this.mobileNumber = mobileNumber;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 }

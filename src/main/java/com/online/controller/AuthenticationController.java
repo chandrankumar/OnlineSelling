@@ -1,10 +1,10 @@
 package com.online.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,32 +35,56 @@ public class AuthenticationController {
 	@Autowired
 	JwtTokenUtil jwtTokenUtil;
 	
+	@Autowired
+	JwtResponse response;
+	
 	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@RequestBody Users user) throws Exception{
+	public JwtResponse registerUser(@RequestBody Users user) throws Exception{
 		
-		String response = authService.registerUserDetails(user);
-		return ResponseEntity.ok(response);
+		String registedUserMsg = authService.registerUserDetails(user);
+		response.setJwttoken(null);
+		response.setMessage(registedUserMsg);
+		return response;
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<?> authenticateUser(@RequestBody JwtRequest user) throws Exception{
+	public JwtResponse authenticateUser(@RequestBody JwtRequest user) throws Exception{
 		
-		authenticate(user.getUsername(),user.getPassword());
-		UserDetails userDetails = authService.loadUserByUsername(user.getUsername());
-		String generateToken = jwtTokenUtil.generateToken(userDetails);
-		System.out.println("Token: "+ generateToken);
-		return ResponseEntity.ok(new JwtResponse(generateToken));
+		Boolean authenticate = authenticate(user.getUsername(),user.getPassword());
+		if(authenticate) {
+			UserDetails userDetails = authService.loadUserByUsername(user.getUsername());
+			String generateToken = jwtTokenUtil.generateToken(userDetails);
+			System.out.println("Token: "+ generateToken);
+			response.setJwttoken(generateToken);
+			response.setMessage("Authenticated successfully");
+		}else {
+			response.setJwttoken(null);
+			response.setMessage("Not a valid user");
+		}
+
+		return response;
+		
 	}
 
-	private void authenticate(String username, String password) throws Exception {
+	private Boolean authenticate(String username, String password) throws Exception {
 		try {
-			Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-			SecurityContextHolder.getContext().setAuthentication(authenticate);
-			System.out.println("Security: "+SecurityContextHolder.getContext().getAuthentication());
-		} catch (DisabledException e) {
+				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+				Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+				SecurityContextHolder.getContext().setAuthentication(authenticate);
+				System.out.println("Security: "+SecurityContextHolder.getContext().getAuthentication());
+				return true;
+			
+		} catch(InternalAuthenticationServiceException iase) {
+			System.out.println("INVALID_CREDENTIALS"+ iase);
+			return false;
+		}
+		
+		catch (DisabledException e) {
 			System.out.println("USER_DISABLED"+ e);
+			return false;
 		} catch (BadCredentialsException e) {
 			System.out.println("INVALID_CREDENTIALS"+ e);
+			return false;
 		}
 	}
 }
